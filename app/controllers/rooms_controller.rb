@@ -10,6 +10,12 @@ class RoomsController < ApplicationController
   # GET /rooms/1
   # GET /rooms/1.json
   def show
+    @messages = Message.where('room_id = ?', params[:id])
+    #@messages = Message.all
+    p '---------------------'
+    p params[:id]
+    session[:id] = params[:id]
+    p session[:id]
   end
 
   # GET /rooms/new

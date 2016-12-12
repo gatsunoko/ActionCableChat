@@ -5,5 +5,26 @@
   <%= @room.title %>
 </p>
 
+<div id="messages">
+	<% @messages.each do |message| %>
+		<%= render 'message', message: message %>
+	<% end -%>
+</div>
+
+<form>
+  <label>Say something:</label><br>
+  <input type="text" data-behavior="room_speaker">
+</form>
+
+<script>
+$(document).on('keypress', '[data-behavior~=room_speaker]', function(event) {
+  if (event.keyCode === 13) {
+    App.room.speak(event.target.value, <%= @room.id %>);
+    event.target.value = '';
+    return event.preventDefault();
+  }
+});
+</script>
+
 <%= link_to 'Edit', edit_room_path(@room) %> |
 <%= link_to 'Back', rooms_path %>
