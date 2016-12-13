@@ -17,9 +17,26 @@
 </form>
 
 <script>
+App.room1 = App.cable.subscriptions.create({
+  channel: 'RoomChannel',
+  room: <%= @room.id %>
+}, {
+  connected: function() {},
+  disconnected: function() {},
+  received: function(data) {
+    return $('#messages').append(data['message']);
+  },
+  speak: function(message, room_id) {
+    return this.perform('speak', {
+      message: message,
+      room_id: room_id
+    });
+  }
+});
+
 $(document).on('keypress', '[data-behavior~=room_speaker]', function(event) {
   if (event.keyCode === 13) {
-    App.room.speak(event.target.value, <%= @room.id %>);
+    App.room1.speak(event.target.value, <%= @room.id %>);
     event.target.value = '';
     return event.preventDefault();
   }
